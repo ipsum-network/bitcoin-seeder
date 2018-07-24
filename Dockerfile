@@ -1,15 +1,32 @@
-FROM ubuntu:16.04
+FROM alpine:3.3
 
-RUN apt-get update && \
-    apt-get --no-install-recommends --yes install \
-         build-essential \
-         libboost-all-dev \
-         libssl-dev
+RUN mkdir -p /app/bin /app/src /var/lib/ipsum-seeder
 
-WORKDIR /ips
+WORKDIR /app/src
 
-COPY . .
+ADD . /app/src
 
-RUN make
+RUN apk --no-cache add --virtual build_deps    \
+      boost-dev                                \
+      gcc                                      \
+      git                                      \
+      g++                                      \
+      libc-dev                                 \
+      make                                     \
+      openssl-dev                           && \
+      apk add --update bash                 && \
+    make                                    && \
+    mv /app/src/dnsseed /app/bin/dnsseed    && \
+    rm -rf /app/src                         && \
+    apk --purge del build_deps
 
-ENTRYPOINT ["/ips/dnsseed"]
+RUN apk --no-cache add    \
+      libgcc              \
+      libstdc++
+
+WORKDIR /var/lib/ipsum-seeder
+VOLUME /var/lib/ipsum-seeder
+
+EXPOSE 53/udp
+
+ENTRYPOINT ["/app/bin/dnsseed"]
