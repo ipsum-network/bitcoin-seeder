@@ -30,3 +30,8 @@ VOLUME /var/lib/ipsum-seeder
 EXPOSE 53/udp
 
 ENTRYPOINT ["/app/bin/dnsseed"]
+
+CMD ["-h", "dnsseed.ipsum.network", \
+     "-n", "seed.ipsum.network", \
+     "-m", "admin@ipsum.network", \
+     "-p", "53"]
