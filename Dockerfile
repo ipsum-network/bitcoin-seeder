@@ -1,3 +1,22 @@
+# compiles and runs ipsum-seeder
+#
+# build the container:
+#   docker build -t ipsumnetwork/ipsum-seeder .
+#
+# run the dns node:
+#   docker run --name ips-seeder --restart=always -d --net bridge -p 173.249.60.247:53:53 -p 173.249.60.247:53:53/udp -v /seeder:/var/lib/ipsum-seeder aviator86/ipsum-seeder
+# if you want to poke around in the container:
+#   docker run -ti --rm --entrypoint /bin/sh ipsumnetwork/ipsum-seeder -c /bin/sh
+#
+# and don't forget on the host:
+#
+#   ufw allow 53
+#
+# related resources:
+#
+#   https://github.com/sipa/bitcoin-seeder/blob/master/README
+#   https://help.ubuntu.com/community/UFW
+#   http://docs.docker.io/installation/ubuntulinux/#docker-and-ufw
 FROM alpine:3.3
 
 RUN mkdir -p /app/bin /app/src /var/lib/ipsum-seeder
@@ -32,6 +51,6 @@ EXPOSE 53/udp
 ENTRYPOINT ["/app/bin/dnsseed"]
 
 CMD ["-h", "dnsseed.ipsum.network", \
-     "-n", "seed.ipsum.network", \
+     "-n", "173.249.60.247", \
      "-m", "admin@ipsum.network", \
      "-p", "53"]
