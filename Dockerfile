@@ -4,7 +4,8 @@
 #   docker build -t ipsumnetwork/ipsum-seeder .
 #
 # run the dns node:
-#   docker run --name ips-seeder --restart=always -d --net bridge -p 173.249.60.247:53:53 -p 173.249.60.247:53:53/udp -v /seeder:/var/lib/ipsum-seeder aviator86/ipsum-seeder
+#   docker run --name ips-seeder --restart=always -d --net bridge -p IP:53:53 -p IP:53:53/udp -v /seeder:/var/lib/ipsum-seeder  ipsumnetwork/ipsum-seeder
+#
 # if you want to poke around in the container:
 #   docker run -ti --rm --entrypoint /bin/sh ipsumnetwork/ipsum-seeder -c /bin/sh
 #
@@ -51,6 +52,6 @@ EXPOSE 53/udp
 ENTRYPOINT ["/app/bin/dnsseed"]
 
 CMD ["-h", "dnsseed.ipsum.network", \
-     "-n", "173.249.60.247", \
+     "-n", "seed.ipsum.network", \
      "-m", "admin@ipsum.network", \
      "-p", "53"]
