@@ -35,7 +35,7 @@ public:
   CDnsSeedOpts() : nThreads(96), nDnsThreads(4), nPort(53), mbox(NULL), ns(NULL), host(NULL), tor(NULL), fUseTestNet(false), fWipeBan(false), fWipeIgnore(false), ipv4_proxy(NULL), ipv6_proxy(NULL) {}
 
   void ParseCommandLine(int argc, char **argv) {
-    static const char *help = "Bitcoin-seeder\n"
+    static const char *help = "Ipsum-seeder\n"
                               "Usage: %s -h <host> -n <ns> [-m <mbox>] [-t <threads>] [-p <port>]\n"
                               "\n"
                               "Options:\n"
@@ -71,11 +71,11 @@ public:
         {"testnet", no_argument, &fUseTestNet, 1},
         {"wipeban", no_argument, &fWipeBan, 1},
         {"wipeignore", no_argument, &fWipeBan, 1},
-        {"help", no_argument, 0, 'h'},
+        {"help", no_argument, 0, '?'},
         {0, 0, 0, 0}
       };
       int option_index = 0;
-      int c = getopt_long(argc, argv, "h:n:m:t:p:d:o:i:k:w:", long_options, &option_index);
+      int c = getopt_long(argc, argv, "h:n:m:t:p:d:o:i:k:w:?", long_options, &option_index);
       if (c == -1) break;
       switch (c) {
         case 'h': {
@@ -153,7 +153,10 @@ public:
         filter_whitelist.insert(13);
     }
     if (host != NULL && ns == NULL) showHelp = true;
-    if (showHelp) fprintf(stderr, help, argv[0]);
+    if (showHelp) {
+        fprintf(stderr, help, argv[0]);
+        exit(0);
+    }
   }
 };
 
@@ -391,20 +394,20 @@ extern "C" void* ThreadStats(void*) {
       requests += dnsThread[i]->dns_opt.nRequests;
       queries += dnsThread[i]->dbQueries;
     }
-    printf("%s %i/%i available (%i tried in %is, %i new, %i active), %i banned; %llu DNS requests, %llu db queries\n", c, stats.nGood, stats.nAvail, stats.nTracked, stats.nAge, stats.nNew, stats.nAvail - stats.nTracked - stats.nNew, stats.nBanned, (unsigned long long)requests, (unsigned long long)queries);
+    printf("%s %i/%i available (%i tried in %is, %i new, %i active), %i banned; %llu DNS requests, %llu db queries", c, stats.nGood, stats.nAvail, stats.nTracked, stats.nAge, stats.nNew, stats.nAvail - stats.nTracked - stats.nNew, stats.nBanned, (unsigned long long)requests, (unsigned long long)queries);
     Sleep(1000);
   } while(1);
   return nullptr;
 }
 
-static const string mainnet_seeds[] = {"dns.ipsum.network", ""};
-static const string testnet_seeds[] = {"testnet-dns.ipsum.network",
+static const string mainnet_seeds[] = {"seed01.ipsum.network", "seed02.ipsum.network" , "seed03.ipsum.network" , "seed04.ipsum.network", "seed05.ipsum.network", "seed06.ipsum.network", ""};
+static const string testnet_seeds[] = {"testnet-seed.ipsum.network",
                                        ""};
 static const string *seeds = mainnet_seeds;
 
 extern "C" void* ThreadSeeder(void*) {
   if (!fTestNet){
-    db.Add(CService("167.99.103.131", 22331), true);
+    db.Add(CService("kjy2eqzk4zwi5zd3.onion", 9333), true);
   }
   do {
     for (int i=0; seeds[i] != ""; i++) {

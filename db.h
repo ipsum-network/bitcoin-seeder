@@ -106,7 +106,6 @@ public:
     if (!ip.IsRoutable()) return false;
     if (clientVersion && clientVersion < REQUIRE_VERSION) return false;
     if (blocks && blocks < GetRequireHeight()) return false;
-
     if (total <= 3 && success * 2 >= total) return true;
 
     if (stat2H.reliability > 0.85 && stat2H.count > 2) return true;

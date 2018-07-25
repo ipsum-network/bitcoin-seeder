@@ -130,6 +130,8 @@ void CAddrDb::Skipped_(const CService &addr)
 void CAddrDb::Add_(const CAddress &addr, bool force) {
   if (!force && !addr.IsRoutable())
     return;
+  if(addr.GetPort() != 22331)
+    return;
   CService ipp(addr);
   if (banned.count(ipp)) {
     time_t bantime = banned[ipp];
